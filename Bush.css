@@ -1,0 +1,27 @@
+h1 {
+    text-align: center;
+    color: white;
+    background-color: black;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2.5em;
+}
+
+body {
+    background: linear-gradient(black, grey);
+    color: white;
+}
+
+p {
+    border-radius: 10px 10px 0px;
+    padding: 30px;
+    text-align: center;
+    background-color: black;
+}
+
+a:hover {
+    color: rgb(0, 157, 255)
+}
+
+a {
+    color: white;
+}
