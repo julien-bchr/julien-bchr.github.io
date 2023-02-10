@@ -1,0 +1,32 @@
+title {
+    text-align: center;
+}
+
+body {
+    background-image: url(https://www.blouptrotters.com/wp-content/uploads/2015/12/coucher-soleil-angkor-vat.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+h2 {
+    text-align: center;
+}
+
+.sommaire {
+    background-color: skyblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.box {
+    margin-right: none;
+    background-color: skyblue;
+    color: white;
+    padding: 20px;
+}
+
+.box:hover {
+    background-color: black;
+}
