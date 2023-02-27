@@ -1,0 +1,140 @@
+.slides {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: auto;
+    width: 8200px;
+}
+
+.info1 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/bg2.jpg);
+    background-size: 1025px 577px;
+}
+
+.headline1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.menu {
+    font: 50px/10px Bold Arial;
+    color: white;
+    letter-spacing: 0;
+    padding-left: 10px;
+}
+
+.titre {
+    text-align: right;
+    color: white;
+    padding-top: 10px;
+    font: 30px Arial;
+}
+
+.booking {
+    color: white;
+    transition: 0.5s;
+    padding-top: 20px;
+    padding-right: 10px;
+    font: 20px;
+}
+
+.booking:hover {
+    color: purple
+}
+
+.headline2 {
+    text-align: right;
+    padding-right: 100px;
+    color: white;
+}
+
+.headline3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+}
+
+.gauche {
+    rotate: 90deg;
+    color: white;
+    transition: 1s;
+}
+
+.gauche:hover {
+    color: purple
+}
+
+.food {
+    font: 42px/42px bold Arial;
+    color: white;
+}
+
+.taste {
+    letter-spacing: .5em;
+    font: 14px Arial;
+    color: white;
+}
+
+.droite {
+    rotate: 270deg;
+    color: white;
+    transition: 1s;
+}
+
+.droite:hover {
+    color: purple
+}
+
+.headline4 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    color: white;
+}
+
+.contact:hover {
+    color: purple
+}
+
+.awards:hover {
+    color: purple
+}
+
+.info2 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/chef.jpg);
+    background-size: 1025px 577px;
+}
+
+.info3 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/place.jpg);
+    background-size: 1025px 577px;
+}
+
+.info4 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/story.jpg);
+    background-size: 1025px 577px;
+}
+
+.info5 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2021/10/1-UV-WEB-HOME-SLIDE-EVENT-1200.jpeg);
+    background-size: 1025px 577px;
+}
+
+.info6 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/news.jpg);
+    background-size: 1025px 577px;
+}
+
+.info7 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/08/news.jpg);
+    background-size: 1025px 577px;
+}
+
+.info8 {
+    background-image: url(https://uvbypp.cc/wp-content/uploads/2016/07/noisebg2.png);
+    background-size: 1025px 577px;
+}

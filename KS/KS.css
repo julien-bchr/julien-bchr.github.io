@@ -27,6 +27,15 @@ h2 {
     padding: 20px;
 }
 
-.box:hover {
+/* .box:hover {
+    background-color: red;
+} */
+
+.sommaire:hover {
     background-color: black;
+}
+
+a {
+    color: white;
+    text-decoration: none;
 }
