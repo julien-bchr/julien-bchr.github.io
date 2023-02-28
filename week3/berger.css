@@ -1,0 +1,101 @@
+title {
+    text-align: center;
+}
+
+body {
+    background-color: blanchedalmond;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h2 {
+    text-align: center;
+    font-family: fantasy;
+}
+
+.container {
+    background-color: skyblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.container2 {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    margin: none;
+    transition: all 2s ease-in-out;
+}
+
+.container2 img {
+    height: 250px;
+    margin: 20px;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+}
+
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.box {
+    margin-right: none;
+    background-color: skyblue;
+    color: white;
+    padding: 20px;
+}
+
+/* .box:hover {
+    background-color: red;
+} */
+
+.sommaire:hover {
+    background-color: black;
+}
+
+a {
+    color: red;
+    text-decoration: underline;
+    transition: 1s;
+}
+
+a:hover {
+    font-size: 300%;
+}
+
+.leftcircle {
+    transition: 2s ease-in-out;
+}
+
+.leftcircle:hover {
+    transform: translateX(960px);
+}
+
+.rightcircle {
+    transition: 2s ease-in-out;
+}
+
+.rightcircle:hover {
+    transform: translateX(-960px);
+}
+
+.image2 {
+    transition: 1s ease-in-out;
+}
+
+.image2:hover {
+    transform: rotate(360deg);
+}
+
+.image3 {
+    transition: 1s ease-in-out;
+}
+
+.image3:hover {
+    transform: rotate(360deg);
+}
