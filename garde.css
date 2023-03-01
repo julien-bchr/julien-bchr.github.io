@@ -1,0 +1,27 @@
+body {
+    background-color: beige;
+    ;
+}
+
+.liens {
+    background-color: coral;
+}
+
+h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: beige;
+    text-align: center;
+}
+
+a {
+    color: black;
+    text-decoration: dashed;
+    text-align: center;
+    font-size: large;
+    padding: 40px;
+}
+
+a:hover {
+    text-transform: initial;
+    color: white;
+}

@@ -1,3 +1,29 @@
+body {
+    background-color: beige;
+    ;
+}
+
+.abstract {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+    background-color: darksalmon;
+    transition: 1s ease-in-out;
+}
+
+.abstract_hidden {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 30px;
+    background-color: salmon;
+    transition: 1s ease-in-out;
+}
+
+/* .abstract_hidden:hover {
+    display: flex;
+} */
+
+
 .first_row {
     display: flex;
     flex-direction: row;
@@ -30,6 +56,8 @@
     border-radius: 20%;
     text-align: center;
 }
+
+
 
 .text1 {
     background-color: green;
