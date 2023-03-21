@@ -1,98 +1,68 @@
-body {
-    background-color: beige;
-    ;
-}
-
-.abstract {
-    display: flex;
-    justify-content: flex-start;
-    padding-left: 20px;
-    background-color: darksalmon;
-    transition: 1s ease-in-out;
-}
-
-.abstract_hidden {
-    display: flex;
-    justify-content: flex-start;
-    padding-left: 30px;
-    background-color: salmon;
-    transition: 1s ease-in-out;
-}
-
-/* .abstract_hidden:hover {
-    display: flex;
-} */
-
-
-.first_row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 10px;
-}
-
-.second_row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 10px;
-    gap: 10px;
-}
-
-.third_row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 10px;
-    gap: 10px;
-}
-
-.title {
-    background-color: black;
-    color: white;
-    padding: 50px;
-    padding-left: 500px;
-    padding-right: 500px;
-    border-radius: 20%;
+h1 {
+    color: black;
     text-align: center;
+    background-color: blanchedalmond;
 }
 
-
-
-.text1 {
-    background-color: green;
-    color: black;
-    padding: 50px;
+.container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+    background-color: skyblue;
+    padding: 10px;
 }
 
-.text2 {
-    background-color: blue;
-    color: black;
-    padding: 50px;
+.author {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    /* background-color: green; */
+    /* margin-right: 100px; */
+    margin-top: 20px;
+    margin-left: 50px;
 }
 
-.text3 {
-    background-color: green;
-    color: black;
-    padding: 50px;
+.biography {
+    grid-column-start: 4;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 20px;
+    margin-top: 20px;
 }
 
-.text4 {
-    background-color: blue;
-    color: black;
-    padding: 50px;
-    border-radius: 10% 30% 50% 70%;
+.lien1 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+    margin-left: 400px;
+    margin-top: 100px;
 }
 
-.text5 {
-    background-color: blue;
-    color: black;
-    padding: 50px;
+.lien2 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+    margin-top: 100px;
 }
 
-.text6 {
-    background-color: blue;
-    color: black;
-    padding: 50px;
-    border-radius: 30% 10% 70% 50%;
+.lien3 {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+    margin-right: 500px;
+    margin-top: 100px;
 }
