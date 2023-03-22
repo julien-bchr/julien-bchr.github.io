@@ -32,7 +32,24 @@ class Player {
     }
 }
 
+class Platform {
+    constructor({ x, y }) {
+        this.position = { x, y };
+        this.velocity = { x: 0, y: 0 };
+        this.width = 100;
+        this.height = 15;
+    }
+
+    draw() {
+        c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+}
+
 const player = new Player()
+// const platform = new Platform()
+const platforms = [new Platform({ x: 200, y: 100 }), new Platform({ x: 500, y: 200 })]
+
 const keys = {
     right: {
         pressed: false
@@ -46,8 +63,24 @@ const keys = {
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height) //on souhaite supprimer les images précédentes au cours du temps
-    if (keys.right.pressed) { player.velocity.x = 5 } else if (keys.left.pressed) { player.velocity.x = -5 } else { player.velocity.x = 0 }
+    platforms.forEach((platform) => {
+        if (keys.right.pressed && player.position.x < 500) { player.velocity.x = 5 }
+        else if (keys.left.pressed && player.position.x > 50) { player.velocity.x = -5 }
+        else {
+            player.velocity.x = 0
+            if (keys.right.pressed) {
+                platform.position.x -= 5
+            }
+            if (keys.left.pressed) {
+                platform.position.x += 5
+            }
+        }
+        if (player.position.y + player.height <= platform.position.y && player.position.y + player.height + player.velocity.y >= platform.position.y && platform.position.x <= player.position.x + player.width && player.position.x <= platform.position.x + platform.width) { player.velocity.y = 0 } //platform collision detection
+    })
+
     player.update()
+    platforms.forEach((platform) => { platform.draw() })
+
 }
 
 animate() //ne pas oublier d'appeler la fonction sinon rien ne se passera (c'est comme print en python)
@@ -61,7 +94,6 @@ window.addEventListener('keydown', ({ keyCode }) => { //keydown signifie lorsque
             break
         case 40:
             console.log('down')
-            keys.left.pressed = true;
             break
         case 37:
             console.log('left')
@@ -93,5 +125,4 @@ addEventListener('keyup', ({ keyCode }) => { //keyup signifie lorsque l'on ne pr
             keys.right.pressed = false;
             break
     }
-}
-)
+})
