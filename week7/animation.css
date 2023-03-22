@@ -1,8 +1,14 @@
+/* header {
+    background-color: skyblue;
+    height: 300px;
+}
+
 .container {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
-    background-color: blue;
+    background-color: green;
+    justify-content: space-evenly;
 }
 
 .box1 {
@@ -14,7 +20,7 @@
 }
 
 .box3 {
-    background-image: url("mario.png");
+    background-color: red;
 }
 
 .box4 {
@@ -22,7 +28,7 @@
 }
 
 .box5 {
-    background-color: url("https://i.pinimg.com/originals/33/02/44/3302440ea0bf94db409e686f7301ed29.png");
+    background-color: black;
 }
 
 .box6 {
@@ -36,6 +42,4 @@
 .mario {
     position: relative;
     left: 100px;
-}
-
-.champi {}
+} */
