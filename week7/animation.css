@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    background-color: blue;
+}
+
+.box1 {
+    background-color: purple;
+}
+
+.box2 {
+    background-color: blue;
+}
+
+.box3 {
+    background-image: url("mario.png");
+}
+
+.box4 {
+    background-color: skyblue;
+}
+
+.box5 {
+    background-color: url("https://i.pinimg.com/originals/33/02/44/3302440ea0bf94db409e686f7301ed29.png");
+}
+
+.box6 {
+    background-color: blue;
+}
+
+.box7 {
+    background-color: purple;
+}
+
+.mario {
+    position: relative;
+    left: 100px;
+}
+
+.champi {}
