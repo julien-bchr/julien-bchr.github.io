@@ -1,0 +1,120 @@
+body {
+    background-color: skyblue;
+}
+
+h1 {
+    background-color: black;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.button_container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: grey;
+    padding: 3vw;
+    gap: 5px;
+}
+
+button {
+    font-family: "helvetica neue", helvetica, sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    border: 2px solid rgb(0 0 200 / 0.6);
+    background: rgb(0 0 200 / 0.6);
+    color: rgb(255 255 255 / 1);
+    box-shadow: 1px 1px 2px rgb(0 0 200 / 0.4);
+    clip-path: polygon(100% 0, 0 0, 50% 100%);
+    padding: 3px 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.column_container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: none;
+    padding: 3vw;
+    gap: 5px;
+}
+
+#button1:hover {
+    background: red;
+}
+
+#column1 {
+    background-color: red;
+    padding: 10px;
+    height: 100px;
+    visibility: hidden;
+}
+
+#button2:hover {
+    background: green;
+}
+
+#column2 {
+    background-color: green;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#button3:hover {
+    background: purple;
+}
+
+#column3 {
+    background-color: purple;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#button4:hover {
+    background: black;
+}
+
+#column4 {
+    background-color: black;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#button5:hover {
+    background: white;
+}
+
+#column5 {
+    background-color: white;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#button6:hover {
+    background: yellow;
+}
+
+#column6 {
+    background-color: yellow;
+    padding: 10px;
+    visibility: hidden;
+}
+
+#button7:hover {
+    background: orange;
+}
+
+#column7 {
+    background-color: orange;
+    padding: 10px;
+    visibility: hidden;
+}
+
+button:hover {
+    background-color: red;
+}
