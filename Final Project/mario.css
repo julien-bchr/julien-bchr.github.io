@@ -1,0 +1,33 @@
+body {
+    background-color: orange;
+}
+
+.ground_pattern {
+    height: 200px;
+    width: 1500px;
+    display: flex;
+    background-image: url('ground.png');
+    background-repeat: repeat-x;
+    background-size: auto 200px;
+    margin-top: 400px;
+    z-index: 2;
+    position: relative;
+}
+
+.hole {
+    height: 55px;
+    width: 100%;
+    background-color: sienna;
+    margin-top: none;
+    z-index: 1;
+    position: absolute;
+    top: 547px;
+}
+
+#mario {
+    position: absolute;
+    top: 450px;
+    left: 500px;
+    z-index: 3;
+    height: 100px;
+}
