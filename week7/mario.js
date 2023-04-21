@@ -8,17 +8,48 @@ const gravity = 0.5 //pour plus de réalisme, on rajoute une accélération
 
 class Player {
     // on pose les bases: un carré de telle taille, telle position, telle vitesse
-    constructor() {
-        this.position = { x: 100, y: 100 };
-        this.velocity = { x: 0, y: 10 };
-        this.width = 30;
-        this.height = 30;
-    }
+    // constructor() {
+    //     this.position = { x: 100, y: 100 };
+    //     this.velocity = { x: 0, y: 10 };
+    //     this.width = 30;
+    //     this.height = 30;
+    // }
 
     // on dessine notre objet qu'on appelle this
+    // draw() {
+    //     c.fillStyle = 'red'
+    //     c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    // }
+
+    constructor() {
+        this.position = { x: 100, y: 100 };
+        this.angle = 0;
+        this.width = 30;
+        this.height = 30;
+        this.velocity = { x: 0, y: 10 };
+    }
+
     draw() {
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        //c.translate(this.position.x, this.position.y); // Translation vers la position x, y
+        c.fillStyle = 'red';
+        c.beginPath();
+        var angle = (Math.PI * 2) / 10; // Utiliser 10 pour un cercle avec 5 pointes
+        var innerRadius = 12; // Rayon intérieur de l'étoile
+        var outerRadius = 30; // Rayon extérieur de l'étoile
+        var cx = this.position.x; // Coordonnée x du centre de l'étoile
+        var cy = this.position.y; // Coordonnée y du centre de l'étoile
+        for (var i = 0; i < 10; i++) {
+            var radius = i % 2 === 0 ? outerRadius : innerRadius;
+            var x = Math.cos(i * angle) * radius + cx;
+            var y = Math.sin(i * angle) * radius + cy;
+            if (i === 0) {
+                c.moveTo(x, y);
+            } else {
+                c.lineTo(x, y);
+            }
+        }
+        c.closePath();
+        c.fill();
     }
 
     //on fait une fonction update pour changer la vitesse au cours du temps
@@ -47,6 +78,7 @@ class Platform {
 }
 
 const player = new Player()
+console.log(player)
 // const platform = new Platform()
 const platforms = [new Platform({ x: 200, y: 100 }), new Platform({ x: 500, y: 200 })]
 
