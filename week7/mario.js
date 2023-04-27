@@ -1,5 +1,8 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
+const platformImage = new Image();
+platformImage.src = 'https://cdn.staticneo.com/ca/new_super_mario_bros_wii_conceptart_tKE4P.jpg'
+console.log(platformImage)
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -74,6 +77,7 @@ class Platform {
     draw() {
         c.fillStyle = 'blue'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.drawImage(platformImage, this.position.x, this.position.y)
     }
 }
 
