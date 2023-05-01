@@ -1,17 +1,36 @@
-// Exemple de code JavaScript
+// Import every elements for the home page 
 const player = document.getElementById('player');
 const colorbutton = document.getElementById('colorbutton');
 const shapebutton = document.getElementById('shapebutton');
 const playbutton = document.getElementById('playbutton');
-const gravity = 0.5 //pour plus de réalisme, on rajoute une accélération
-const sol_y = 500;
-let scores = [];
+
+// Import every constant needed
+const gravity = 0.5
+let table_scores = [];
 let startTime;
 let elapsedtime = 0;
 let finish_time = 0;
 let scrollOffset = 0;
-let player_speed = 10;
+let player_speed = 2;
+let hp = 100;
+var c;
+var canvas;
+const compteur = 0;
+let isColliding = false;
+let color_detection = 'red'
 
+let keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
+    }
+}
+
+
+// Import every image needed in our game (platform, hills, sky, flag, win_display, replay_button, obstacle)
+// And I precise their size when needed 
 const platformImage = new Image();
 platformImage.src = 'https://raw.githubusercontent.com/chriscourses/mario-game/main/src/img/lgPlatform.png'
 
@@ -30,30 +49,39 @@ winImage.src = 'win.png'
 const replayImage = new Image();
 replayImage.src = 'replay.png'
 
-// Tableau pour stocker les différentes formes possibles
+const obstacleImage = new Image();
+obstacleImage.src = 'obstacle.png'
+obstacleImage.width = obstacleImage.width * 0.1
+obstacleImage.height = obstacleImage.height * 0.1
+console.log(obstacleImage.height)
+
+// Table for different shapes of our player 
 const shapes = ['square', 'circle', 'triangle', 'diamond', 'star'];
 
-// Variable pour stocker l'index de la forme actuelle
+// Variables to stock the color and shape of our player 
 let currentShapeIndex = 0;
-let currentColor = 'rgb(255, 0, 0)'
+let currentColor = 'rgb(0, 0, 0)'
 let currentShape = shapes[currentShapeIndex];
 
-// Fonction pour changer la couleur du carré
+// Function to give a random number between min and max
+function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+// Function to change the color of our player 
 function changeColor() {
-    // Générer une couleur aléatoire en format RGB
+    // Generate a random color
     currentColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-    // Appliquer la couleur aléatoire au carré
+    // Apply it to our player
     player.style.backgroundColor = currentColor;
 
 }
 
+// Function to change the shape of our player 
 function changeShape() {
-    console.log('you clicked on shapebutton');
     // Récupérer la prochaine forme dans le tableau des formes
     currentShapeIndex = (currentShapeIndex + 1) % shapes.length;
-    console.log(currentShapeIndex)
     currentShape = shapes[currentShapeIndex];
-    console.log(currentShape)
     player.className = '';
 
     switch (currentShape) {
@@ -76,24 +104,9 @@ function changeShape() {
             player.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
             break;
     }
-    // Mettre à jour la classe CSS pour la transition
-    // player.classList.add(`shape-${nextShape}`);
 }
 
-// Écouter l'événement de clic sur le bouton 
-colorbutton.addEventListener('click', changeColor);
-shapebutton.addEventListener('click', changeShape);
-
-
-var c;
-var canvas;
-
-const Imagewidth = winImage.width
-const Imageheight = winImage.height
-const compteur = 0;
-
-
-//fonction qui démarre le jeu en ouvrant un canvas
+//function to start the game, it opens a new canvas
 function play() {
     // Créer un élément canvas
     canvas = document.createElement("canvas");
@@ -115,10 +128,14 @@ function play() {
     animate() //il faut mettre animate à l'intérieur de cette boucle car sinon les variable c et canvas ne sont pas définies
 }
 
-//on démarre le jeu en cliquant sur le bouton play
+// Add events whenever we click on changeColor_button, changeShape_button, or play_button
+colorbutton.addEventListener('click', changeColor);
+shapebutton.addEventListener('click', changeShape);
 playbutton.addEventListener("click", play);
 
-//On construit une classe où on a des formes (carré, triangle, etc...)
+
+const sol_y = screen.height - 2 * platformImage.height;
+//We create a class with different shapes (square, circle, triangle, diamond, star)
 class Shape {
     constructor() {
         this.position = { x: 100, y: 100 };
@@ -128,20 +145,18 @@ class Shape {
         this.velocity = { x: 0, y: 10 };
     }
 
-    //on dessine notre objet qu'on appelle this
+    //We draw our object called this
     draw() {
-        //c.translate(this.position.x, this.position.y); // Translation vers la position x, y
-        c.rotate(this.angle); // Rotation selon l'angle actuel
         switch (currentShape) {
             case 'circle':
-                c.fillStyle = currentColor;
+                if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                 c.beginPath();
                 c.arc(this.position.x + 15, this.position.y + 15, 15, 0, Math.PI * 2);
                 c.closePath();
                 c.fill();
                 break;
             case 'triangle':
-                c.fillStyle = currentColor;
+                if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                 c.beginPath();
                 c.moveTo(this.position.x, this.position.y + 30);
                 c.lineTo(this.position.x + 30, this.position.y + 30);
@@ -150,7 +165,7 @@ class Shape {
                 c.fill();
                 break;
             case 'diamond':
-                c.fillStyle = currentColor;
+                if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                 c.beginPath();
                 c.moveTo(this.position.x + 15, this.position.y - 10);
                 c.lineTo(this.position.x + 30, this.position.y + 10);
@@ -160,7 +175,7 @@ class Shape {
                 c.fill();
                 break;
             case 'star':
-                c.fillStyle = currentColor;
+                if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                 c.beginPath();
                 var angle = (Math.PI * 2) / 10; // Utiliser 10 pour un cercle avec 5 pointes
                 var innerRadius = 6; // Rayon intérieur de l'étoile
@@ -181,7 +196,7 @@ class Shape {
                 c.fill();
                 break;
             default: // Par défaut, carré
-                c.fillStyle = currentColor;
+                if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                 c.fillRect(this.position.x, this.position.y, this.width, this.height);
                 break;
         }
@@ -196,18 +211,14 @@ class Shape {
         if (this.position.y + this.height + this.velocity.y <= canvas.height) this.velocity.y += gravity
         else this.velocity.y = 0 //le carré s'arrête quand il atteint le sol
     }
-
-    rotate() {
-        this.angle += Math.PI / 2; // Rotation de 90 degrés
-    }
 }
 
-//on prend un joueur (c'est un objet de notre classe Shape)
+//Our player will be someone from our class Shape 
 let realplayer = new Shape()
 
-//on crée une classe de plateformes
+//We create a class for our plateforms
 class Platform {
-    constructor({ x, y }, w, h, isFixed = false) {
+    constructor({ x, y }, isFixed = false) {
         this.position = { x, y };
         this.velocity = { x: 0, y: 0 };
         this.width = platformImage.width;
@@ -215,18 +226,27 @@ class Platform {
         this.isFixed = isFixed;
     }
 
-    setColor(color) { this.color = color }
-
-    draw(color) {
+    draw() {
         c.drawImage(platformImage, this.position.x, this.position.y)
     }
 }
 
-let platforms = [new Platform({ x: 0, y: sol_y }, window.innerWidth, 15, true), new Platform({ x: platformImage.width - 3, y: sol_y }, 100, 15, true), new Platform({ x: 0.5 * platformImage.width, y: 350 }, 200, 15, false), new Platform({ x: 0.8 * platformImage.width, y: 200 }, 150, 15, false), new Platform({ x: 1.8 * platformImage.width, y: 250 }, 330, 15, false), new Platform({ x: 2.8 * platformImage.width, y: 300 }, 100, 15, false), new Platform({ x: 3.8 * platformImage.width, y: 350 }, 100, 15, false), new Platform({ x: 4.8 * platformImage.width, y: 400 }, 100, 15, false)]
+//We create a list of every platform we need 
+let platforms = [
+    new Platform({ x: 0, y: sol_y }, true),
+    new Platform({ x: platformImage.width - 3, y: sol_y }, true),
+    new Platform({ x: 0.5 * platformImage.width, y: sol_y - 150 }, false),
+    new Platform({ x: 0.8 * platformImage.width, y: sol_y - 300 }, false),
+    new Platform({ x: 1.8 * platformImage.width, y: sol_y - 250 }, false),
+    new Platform({ x: 2.8 * platformImage.width, y: sol_y - 200 }, false),
+    new Platform({ x: 3.8 * platformImage.width, y: sol_y - 150 }, false),
+    new Platform({ x: 4.8 * platformImage.width, y: sol_y - 100 }, false)
+]
+let end_position = platforms[platforms.length - 1].position.x + 800
 
-//on crée une classe d'objets
+//We create a class for hills 
 class GenericObjects {
-    constructor({ x, y }, w, h, isFixed = false) {
+    constructor({ x, y }) {
         this.position = { x, y };
         this.velocity = { x: 0, y: 0 };
         this.width = hillsImage.width;
@@ -238,11 +258,15 @@ class GenericObjects {
     }
 }
 
-let hills = [new GenericObjects({ x: 0, y: sol_y }, window.innerWidth, 15, false), new GenericObjects({ x: 100, y: 200 }, 100, 15, false)]
+//We create a list of every hill we need 
+let hills = [
+    new GenericObjects({ x: 0, y: sol_y }),
+    new GenericObjects({ x: 100, y: sol_y - 300 })
+]
 
-//on crée une classe pour le ciel
+//We create a class for the sky 
 class sky {
-    constructor({ x, y }, w, h, isFixed = false) {
+    constructor({ x, y }) {
         this.position = { x, y };
         this.velocity = { x: 0, y: 0 };
         this.width = skyImage.width;
@@ -254,11 +278,16 @@ class sky {
     }
 }
 
-let skys = [new sky({ x: 0, y: 0 }, window.innerWidth, 15, false), new sky({ x: skyImage.width + 200, y: 0 }, window.innerWidth, 15, false), new sky({ x: 2 * skyImage.width, y: 0 }, window.innerWidth, 15, false)]
+let skys = [
+    new sky({ x: 0, y: 0 }),
+    new sky({ x: skyImage.width + 200, y: 0 }),
+    new sky({ x: 2 * skyImage.width, y: 0 })
+]
 
+//We create a class for the flag 
 class Arrival {
     constructor() {
-        this.position = { x: 30000, y: 250 };
+        this.position = { x: end_position, y: sol_y - 250 };
         this.velocity = { x: 0, y: 0 };
         this.width = arrivalImage.width;
         this.height = arrivalImage.height;
@@ -271,24 +300,22 @@ class Arrival {
 
 let arrival = new Arrival()
 
+//We create a class for the win_display
 class Winning {
     constructor() {
-        this.position = { x: 600, y: 150 }
+        this.position = { x: 600, y: sol_y - 350 }
     }
     draw() {
         c.drawImage(winImage, this.position.x, this.position.y)
-    }
-
-    getbigger() {
-        if (Imagewidth < 2 * winning.width && compteur === 0) { Imagewidth += 5 } else if (Imagewidth >= 2 * winning.width || compteur === 1) { Imagewidth -= 5; compteur = 1 } else if (Imagewidth < winning.width) { Imagewidth += 5; compteur = 0 }
     }
 }
 
 let winning = new Winning()
 
+//We create a class for the Replay button
 class Replay {
     constructor() {
-        this.position = { x: 900, y: 50 }
+        this.position = { x: 900, y: sol_y - 450 }
     }
     draw() {
         c.drawImage(replayImage, this.position.x, this.position.y)
@@ -298,47 +325,69 @@ class Replay {
 
 let replay = new Replay()
 
-let keys = {
-    right: {
-        pressed: false
-    },
-    left: {
-        pressed: false
+//We create a class for our obstacles
+class Obstacle {
+    constructor({ x, y }, w, h, grow) {
+        this.position = { x, y: y - (h - 10) * grow };
+        this.velocity = { x: 0, y: 0 };
+        this.width = w * grow;
+        this.height = h * grow;
+    }
+
+    draw() {
+        c.drawImage(obstacleImage, this.position.x, this.position.y, this.width, this.height)
     }
 }
 
-//fonction pour restart le game
+//We create a list with every obstacle we need 
+let obstacles = [
+    new Obstacle({ x: 0.5 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 150 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 0.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 300 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 1.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 250 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 2.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 200 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 3.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 150 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 4.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 100 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 0.5 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 0.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 1.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 2.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 3.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    new Obstacle({ x: 4.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+]
+
+
+//This function allow us to start the game over
 function init() {
 
     scrollOffset = 0;
+    hp = 100;
 
     //je réinitialise l'état des touches
     keys.left.pressed = false;
     keys.right.pressed = false;
 
+    //We create a class with different shapes (square, circle, triangle, diamond, star)
     class Shape {
         constructor() {
             this.position = { x: 100, y: 100 };
             this.angle = 0;
             this.width = 30;
             this.height = 30;
-            this.velocity = { x: -10, y: 10 };
+            this.velocity = { x: 0, y: 10 };
         }
 
-        //on dessine notre objet qu'on appelle this
+        //We draw our object called this
         draw() {
-            //c.translate(this.position.x, this.position.y); // Translation vers la position x, y
-            c.rotate(this.angle); // Rotation selon l'angle actuel
             switch (currentShape) {
                 case 'circle':
-                    c.fillStyle = currentColor;
+                    if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                     c.beginPath();
                     c.arc(this.position.x + 15, this.position.y + 15, 15, 0, Math.PI * 2);
                     c.closePath();
                     c.fill();
                     break;
                 case 'triangle':
-                    c.fillStyle = currentColor;
+                    if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                     c.beginPath();
                     c.moveTo(this.position.x, this.position.y + 30);
                     c.lineTo(this.position.x + 30, this.position.y + 30);
@@ -347,7 +396,7 @@ function init() {
                     c.fill();
                     break;
                 case 'diamond':
-                    c.fillStyle = currentColor;
+                    if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                     c.beginPath();
                     c.moveTo(this.position.x + 15, this.position.y - 10);
                     c.lineTo(this.position.x + 30, this.position.y + 10);
@@ -357,7 +406,7 @@ function init() {
                     c.fill();
                     break;
                 case 'star':
-                    c.fillStyle = currentColor;
+                    if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                     c.beginPath();
                     var angle = (Math.PI * 2) / 10; // Utiliser 10 pour un cercle avec 5 pointes
                     var innerRadius = 6; // Rayon intérieur de l'étoile
@@ -378,7 +427,7 @@ function init() {
                     c.fill();
                     break;
                 default: // Par défaut, carré
-                    c.fillStyle = currentColor;
+                    if (isColliding) { c.fillStyle = color_detection } else { c.fillStyle = currentColor }
                     c.fillRect(this.position.x, this.position.y, this.width, this.height);
                     break;
             }
@@ -393,18 +442,14 @@ function init() {
             if (this.position.y + this.height + this.velocity.y <= canvas.height) this.velocity.y += gravity
             else this.velocity.y = 0 //le carré s'arrête quand il atteint le sol
         }
-
-        rotate() {
-            this.angle += Math.PI / 2; // Rotation de 90 degrés
-        }
     }
 
-    //on prend un joueur (c'est un objet de notre classe Shape)
+    //Our player will be someone from our class Shape 
     realplayer = new Shape()
 
-    //on crée une classe de plateformes
+    //We create a class for our plateforms
     class Platform {
-        constructor({ x, y }, w, h, isFixed = false) {
+        constructor({ x, y }, isFixed = false) {
             this.position = { x, y };
             this.velocity = { x: 0, y: 0 };
             this.width = platformImage.width;
@@ -412,18 +457,26 @@ function init() {
             this.isFixed = isFixed;
         }
 
-        setColor(color) { this.color = color }
-
-        draw(color) {
+        draw() {
             c.drawImage(platformImage, this.position.x, this.position.y)
         }
     }
 
-    platforms = [new Platform({ x: 0, y: sol_y }, window.innerWidth, 15, true), new Platform({ x: platformImage.width - 3, y: sol_y }, 100, 15, true), new Platform({ x: 0.5 * platformImage.width, y: 350 }, 200, 15, false), new Platform({ x: 0.8 * platformImage.width, y: 200 }, 150, 15, false), new Platform({ x: 1.8 * platformImage.width, y: 250 }, 330, 15, false), new Platform({ x: 2.8 * platformImage.width, y: 300 }, 100, 15, false), new Platform({ x: 3.8 * platformImage.width, y: 350 }, 100, 15, false), new Platform({ x: 4.8 * platformImage.width, y: 400 }, 100, 15, false)]
+    //We create a list of every platform we need 
+    platforms = [
+        new Platform({ x: 0, y: sol_y }, true),
+        new Platform({ x: platformImage.width - 3, y: sol_y }, true),
+        new Platform({ x: 0.5 * platformImage.width, y: sol_y - 150 }, false),
+        new Platform({ x: 0.8 * platformImage.width, y: sol_y - 300 }, false),
+        new Platform({ x: 1.8 * platformImage.width, y: sol_y - 250 }, false),
+        new Platform({ x: 2.8 * platformImage.width, y: sol_y - 200 }, false),
+        new Platform({ x: 3.8 * platformImage.width, y: sol_y - 150 }, false),
+        new Platform({ x: 4.8 * platformImage.width, y: sol_y - 100 }, false)
+    ]
 
-    //on crée une classe d'objets
+    //We create a class for hills 
     class GenericObjects {
-        constructor({ x, y }, w, h, isFixed = false) {
+        constructor({ x, y }) {
             this.position = { x, y };
             this.velocity = { x: 0, y: 0 };
             this.width = hillsImage.width;
@@ -435,11 +488,15 @@ function init() {
         }
     }
 
-    hills = [new GenericObjects({ x: 0, y: sol_y }, window.innerWidth, 15, false), new GenericObjects({ x: 100, y: 200 }, 100, 15, false)]
+    //We create a list of every hill we need 
+    hills = [
+        new GenericObjects({ x: 0, y: sol_y }),
+        new GenericObjects({ x: 100, y: sol_y - 300 })
+    ]
 
-    //on crée une classe pour le ciel
+    //We create a class for the sky 
     class sky {
-        constructor({ x, y }, w, h, isFixed = false) {
+        constructor({ x, y }) {
             this.position = { x, y };
             this.velocity = { x: 0, y: 0 };
             this.width = skyImage.width;
@@ -451,11 +508,16 @@ function init() {
         }
     }
 
-    skys = [new sky({ x: 0, y: 0 }, window.innerWidth, 15, false), new sky({ x: skyImage.width + 200, y: 0 }, window.innerWidth, 15, false), new sky({ x: 2 * skyImage.width, y: 0 }, window.innerWidth, 15, false)]
+    skys = [
+        new sky({ x: 0, y: 0 }),
+        new sky({ x: skyImage.width + 200, y: 0 }),
+        new sky({ x: 2 * skyImage.width, y: 0 })
+    ]
 
+    //We create a class for the flag 
     class Arrival {
         constructor() {
-            this.position = { x: 30000, y: 250 };
+            this.position = { x: end_position, y: sol_y - 250 };
             this.velocity = { x: 0, y: 0 };
             this.width = arrivalImage.width;
             this.height = arrivalImage.height;
@@ -468,44 +530,64 @@ function init() {
 
     arrival = new Arrival()
 
+    //We create a class for the win_display
     class Winning {
         constructor() {
-            this.position = { x: 600, y: 150 }
+            this.position = { x: 600, y: sol_y - 350 }
         }
         draw() {
             c.drawImage(winImage, this.position.x, this.position.y)
-        }
-
-        getbigger() {
-            if (Imagewidth < 2 * winning.width && compteur === 0) { Imagewidth += 5 } else if (Imagewidth >= 2 * winning.width || compteur === 1) { Imagewidth -= 5; compteur = 1 } else if (Imagewidth < winning.width) { Imagewidth += 5; compteur = 0 }
         }
     }
 
     winning = new Winning()
 
+    //We create a class for the Replay button
     class Replay {
         constructor() {
-            this.position = { x: 600, y: 150 }
+            this.position = { x: 900, y: sol_y - 450 }
         }
         draw() {
-            c.drawImage(replay, this.position.x, this.position.y)
+            c.drawImage(replayImage, this.position.x, this.position.y)
         }
     }
 
 
-    let replay = new Replay()
+    replay = new Replay()
 
-    keys = {
-        right: {
-            pressed: false
-        },
-        left: {
-            pressed: false
+    //We create a class for our obstacles
+    //We create a class for our obstacles
+    class Obstacle {
+        constructor({ x, y }, w, h, grow) {
+            this.position = { x, y: y - (h - 10) * grow };
+            this.velocity = { x: 0, y: 0 };
+            this.width = w * grow;
+            this.height = h * grow;
+        }
+
+        draw() {
+            c.drawImage(obstacleImage, this.position.x, this.position.y, this.width, this.height)
         }
     }
 
+    //We create a list with every obstacle we need 
+    obstacles = [
+        new Obstacle({ x: 0.5 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 150 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 0.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 300 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 1.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 250 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 2.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 200 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 3.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 150 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 4.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y - 100 }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 0.5 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 0.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 1.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 2.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 3.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+        new Obstacle({ x: 4.8 * platformImage.width + randomIntFromInterval(0, platformImage.width - obstacleImage.width), y: sol_y }, obstacleImage.width, obstacleImage.height, Math.random() * 2 + 1),
+    ]
 }
 
+// This function is the main one, it does animate our canvas
 function animate() {
     requestAnimationFrame(animate)
     if (scrollOffset === 0 && keys.right.pressed) {
@@ -517,53 +599,82 @@ function animate() {
 
     let elapsedtime_string = elapsedtime.toFixed(2); //on ne prend que 3 chiffres significatifs 
     c.clearRect(0, 0, canvas.width, canvas.height) //on souhaite supprimer les images précédentes au cours du temps
+    skys.forEach((sky) => { sky.draw() })
+    hills.forEach((GenericObjects) => { GenericObjects.draw() })
+
     platforms.forEach((platform) => {
-        if (keys.right.pressed && realplayer.position.x < 500 && scrollOffset < 30000) { realplayer.velocity.x = player_speed }
-        else if (keys.left.pressed && realplayer.position.x > 50 && scrollOffset < 30000) { realplayer.velocity.x = -player_speed }
+        if (keys.right.pressed && realplayer.position.x < 500 && scrollOffset < end_position) { realplayer.velocity.x = player_speed * (platforms.length - 2) }
+        else if (keys.left.pressed && realplayer.position.x > 50 && scrollOffset < end_position) { realplayer.velocity.x = -player_speed * (platforms.length - 2) }
         else {
             realplayer.velocity.x = 0
             // le && permet de garder les plateformes avec la propriété fixe fixes
-            if (keys.right.pressed && platform.isFixed == false && scrollOffset < 30000) {
-                platform.position.x -= player_speed
+            if (keys.right.pressed && platform.isFixed == false && scrollOffset < end_position) {
+                platform.position.x -= player_speed * (platforms.length - 2)
                 hills.forEach((GenericObjects) => { GenericObjects.position.x -= player_speed * 0.6 })
-                skys.forEach((sky) => { sky.position.x -= player_speed * 0.1 })
+                skys.forEach((sky) => { sky.position.x -= player_speed * 0.2 })
+                obstacles.forEach((Obstacle) => { Obstacle.position.x -= player_speed })
                 arrival.position.x -= player_speed
                 scrollOffset += player_speed
             }
-            if (keys.left.pressed && platform.isFixed == false && scrollOffset < 30000) {
-                platform.position.x += player_speed
+            console.log(scrollOffset)
+            console.log(end_position)
+
+            if (keys.left.pressed && platform.isFixed == false && scrollOffset < end_position) {
+                platform.position.x += player_speed * (platforms.length - 2)
                 hills.forEach((GenericObjects) => { GenericObjects.position.x += player_speed * 0.6 })
-                skys.forEach((sky) => { sky.position.x += player_speed * 0.1 })
+                skys.forEach((sky) => { sky.position.x += player_speed * 0.2 })
+                obstacles.forEach((Obstacle) => { Obstacle.position.x += player_speed })
                 arrival.position.x += player_speed
-                // console.log(platform.position.x)
                 scrollOffset -= player_speed
             }
         }
         if (realplayer.position.y + realplayer.height <= platform.position.y && realplayer.position.y + realplayer.height + realplayer.velocity.y >= platform.position.y && platform.position.x <= realplayer.position.x + realplayer.width && realplayer.position.x <= platform.position.x + platform.width) { realplayer.velocity.y = 0 } //platform collision detection
-        if (scrollOffset === 30000) {
-            console.log('you win in:' + elapsedtime_string + 's'); realplayer.velocity.x = 0; realplayer.position.x = arrivalImage.width / 2; arrival.position.x = 0; winning.draw(); winning.getbigger(); finish_time = elapsedtime_string; scrollOffset++
+        if (end_position <= scrollOffset && scrollOffset < end_position + player_speed) {
+            console.log('you win in:' + elapsedtime_string + 's'); realplayer.velocity.x = 0; realplayer.position.x = arrivalImage.width / 2; arrival.position.x = 0; winning.draw(); finish_time = elapsedtime_string; scrollOffset += 150
         }
-        else if (scrollOffset > 30000) { realplayer.velocity.x = 0; realplayer.position.x = arrivalImage.width / 2; arrival.position.x = 0; winning.draw(); winning.getbigger(); replay.draw() }
-        // console.log(scrollOffset)
+        else if (scrollOffset > end_position + player_speed) { realplayer.velocity.x = 0; realplayer.position.x = arrivalImage.width / 2; arrival.position.x = 0; winning.draw(); replay.draw(); console.log('ça marche') }
     })
 
-    skys.forEach((sky) => { sky.draw() })
-    hills.forEach((GenericObjects) => { GenericObjects.draw() })
+    // obstacle collision detection 
+    obstacles.forEach((Obstacle) => {
+        if (realplayer.position.y <= Obstacle.position.y + Obstacle.height &&
+            realplayer.position.y + realplayer.height + realplayer.velocity.y >= Obstacle.position.y &&
+            Obstacle.position.x <= realplayer.position.x + realplayer.width - 15 &&
+            realplayer.position.x <= Obstacle.position.x + Obstacle.width - 10) { isColliding = true, hp -= 3 } //obstacle collision detection 
+    })
+
+    // player become black whenever it hits an obstacle
+    if (isColliding) {
+        setTimeout(() => {
+            isColliding = false;
+        }, 100); // 1000 ms = 1 seconde
+    }
+
+
     platforms.forEach((platform) => { platform.draw('red') })
+    obstacles.forEach((obstacle) => { obstacle.draw() })
     arrival.draw()
     realplayer.update()
 
     // Afficher le temps écoulé sur le canvas
-    if (scrollOffset < 30000) {
+    if (scrollOffset < end_position) {
         c.fillStyle = 'black';
         c.font = '24px TimesNewRoman';
-        c.fillText(`Time: ${elapsedtime_string} s`, 1000, 130); // Afficher le temps en secondes
+        c.fillText(`Time: ${elapsedtime_string} s`, 1000, 130);
+        c.fillText(`HP: ${hp} <3`, 1000, 160);// Afficher le temps en secondes
     }
     else {
         c.fillStyle = 'black';
         c.font = '24px TimesNewRoman';
         c.fillText(`Final time: ${finish_time} s`, 1000, 130);
+        c.fillText(`Your Score:`, 100, 100);
+        c.fillText(`Time Score: 716 / ${finish_time} * 0.5 = ${(716 / finish_time).toFixed(0) * 0.5} pts`, 120, 130);
+        c.fillText(`HP Score: ${hp} / 2 = ${hp / 2} pts`, 120, 160);
+        c.fillText(`Final Score: ${(716 / finish_time).toFixed(0) * 0.5 + hp / 2} %`, 120, 190);
     }
+
+    // if score is zero, the game starts again
+    if (hp <= 0) { init() }
 
     canvas.addEventListener('click', (event) => {
         const mouseX = event.clientX;
@@ -571,13 +682,13 @@ function animate() {
 
         // Vérifiez si le clic est à l'intérieur de la zone de l'image
         if (mouseX >= replay.position.x && mouseX <= replay.position.x + replayImage.width &&
-            mouseY >= replay.position.y && mouseY <= replay.position.y + replayImage.height && scrollOffset > 30000) {
+            mouseY >= replay.position.y && mouseY <= replay.position.y + replayImage.height && scrollOffset > end_position) {
             // Appeler la fonction init() lorsque l'image est cliquée
             init();
         }
     });
-
 }
+
 
 //on démarre le jeu en cliquant sur le bouton play
 arrivalImage.addEventListener("click", play);
@@ -587,7 +698,8 @@ window.addEventListener('keydown', ({ keyCode }) => { //keydown signifie lorsque
     switch (keyCode) {
         case 32:
             console.log('up')
-            realplayer.velocity.y -= 20
+            if (realplayer.velocity.y === 1) { realplayer.velocity.y -= 20 }
+            console.log(realplayer.velocity.y)
             break
         case 40:
             console.log('down')
@@ -611,7 +723,7 @@ document.addEventListener("keydown", function (event) {
 
 
 addEventListener('keyup', ({ keyCode }) => { //keyup signifie lorsque l'on ne presse pas une touche 
-    if (scrollOffset <= 30000) {
+    if (scrollOffset <= end_position) {
         switch (keyCode) {
             case 32:
                 console.log('up')
