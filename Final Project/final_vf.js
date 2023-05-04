@@ -32,7 +32,7 @@ let keys = {
 // Import every image needed in our game (platform, hills, sky, flag, win_display, replay_button, obstacle)
 // And I precise their size when needed 
 const platformImage = new Image();
-platformImage.src = 'https://raw.githubusercontent.com/chriscourses/mario-game/main/src/img/lgPlatform.png'
+platformImage.src = 'platform.png'
 
 const hillsImage = new Image();
 hillsImage.src = 'hills.png'
