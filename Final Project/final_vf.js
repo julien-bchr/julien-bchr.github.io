@@ -126,6 +126,9 @@ function play() {
 
     // drawShapes();
     animate() //il faut mettre animate à l'intérieur de cette boucle car sinon les variable c et canvas ne sont pas définies
+
+    // Remove the event listener from the play button
+    playbutton.removeEventListener("click", play);
 }
 
 // Add events whenever we click on changeColor_button, changeShape_button, or play_button
