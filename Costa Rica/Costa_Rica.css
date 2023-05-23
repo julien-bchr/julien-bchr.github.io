@@ -1,0 +1,142 @@
+body {
+    text-align: center;
+    background-image: url("IMG_9105.JPG");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+}
+
+.videos_container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    left: 25%;
+    right: 25%;
+    /* background-color: red; */
+}
+
+#video1 {
+    display: none;
+    position: absolute;
+    top: 0%;
+    background-color: green;
+}
+
+#video2_1 {
+    display: none;
+}
+
+#video2_2 {
+    display: none;
+}
+
+#video3_1 {
+    display: none;
+}
+
+#video3_2 {
+    display: none;
+}
+
+#video4_1 {
+    display: none;
+}
+
+#video4_2 {
+    display: none;
+}
+
+#video5_1 {
+    display: none;
+}
+
+#video5_2 {
+    display: none;
+}
+
+#video6_1 {
+    display: none;
+}
+
+#video6_2 {
+    display: none;
+}
+
+#diapo {
+    display: none;
+}
+
+#option1 {
+    display: none;
+}
+
+#option2 {
+    display: none;
+}
+
+.choice_container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 85vh;
+    position: relative;
+}
+
+button {
+    color: goldenrod;
+    background-color: black;
+    font-size: 16px;
+    border: 0.3em solid goldenrod;
+    border-radius: 0.5em;
+    width: 12em;
+    height: 3em;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    letter-spacing: 0.1em;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: 0.5s;
+    margin: 1em;
+}
+
+button>span {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    background-color: goldenrod;
+    transform: translateY(150%);
+    border-radius: 50%;
+    transition: 0.5s;
+    left: calc((var(--n) - 1) * 25%);
+    transition-delay: calc((var(--n) - 1) * 0.1s);
+    z-index: -1;
+}
+
+button:hover {
+    color: black !important;
+}
+
+button:hover>span {
+    transform: translateY(0) scale(2);
+}
+
+button>span:nth-child(1) {
+    --n: 1;
+}
+
+button>span:nth-child(2) {
+    --n: 2;
+}
+
+button>span:nth-child(3) {
+    --n: 3;
+}
+
+button>span:nth-child(4) {
+    --n: 4;
+}
