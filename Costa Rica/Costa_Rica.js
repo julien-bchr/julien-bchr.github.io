@@ -7,7 +7,9 @@ window.onload = function () {
     //j'upload toutes mes vidéos 
 
     const video1 = document.getElementById('video1');
+    const video1_container = document.getElementsByClassName('video1_container')[0]
     const diapo = document.getElementById('diapo');
+    const diapo_container = document.getElementsByClassName('diapo_container')[0]
 
     const videos = [
         [document.getElementById('video2_1'), document.getElementById('video2_2')],
@@ -15,6 +17,14 @@ window.onload = function () {
         [document.getElementById('video4_1'), document.getElementById('video4_2')],
         [document.getElementById('video5_1'), document.getElementById('video5_2')],
         [document.getElementById('video6_1'), document.getElementById('video6_2')]
+    ]
+
+    const videos_container = [
+        [document.getElementsByClassName('video2_1_container')[0], document.getElementsByClassName('video2_2_container')[0]],
+        [document.getElementsByClassName('video3_1_container')[0], document.getElementsByClassName('video3_2_container')[0]],
+        [document.getElementsByClassName('video4_1_container')[0], document.getElementsByClassName('video4_2_container')[0]],
+        [document.getElementsByClassName('video5_1_container')[0], document.getElementsByClassName('video5_2_container')[0]],
+        [document.getElementsByClassName('video6_1_container')[0], document.getElementsByClassName('video6_2_container')[0]]
     ]
 
     //j'upload bouton start, option1, et option2
@@ -27,58 +37,36 @@ window.onload = function () {
     //lorsque j'appuie sur le bouton start pour commencer
     startButton.addEventListener('click', function () {
         startButton.remove()
-        video1.style.display = 'inline-grid';
-        video1.requestFullscreen();
-        video1.play()
+        video1_container.style.display = 'block';
+        video1.requestFullscreen()
+        option1.style.display = 'block';
+        option2.style.display = 'block';
     })
-
-    //la video1 se termine
-    attachEndedEvent(video1)
-
-    //fonction qui permet de sortir du plein écran quand une vidéo est terminée
-    function attachEndedEvent(videoElement) {
-        videoElement.addEventListener('ended', function () {
-            document.exitFullscreen();
-            option1.style.display = 'block';
-            option2.style.display = 'block';
-        });
-    }
 
     //je clique sur l'option1
     option1.addEventListener('click', function () {
         if (i == -1) {
-            video1.remove();
-            videos[0][0].style.display = 'inline-grid';
+            video1_container.style.display = 'none';
+            videos_container[0][0].style.display = 'block';
             videos[0][0].requestFullscreen();
-            videos[0][0].play();
             i = 0;
             j = 0;
             option1Text.innerHTML = Bouton_gauche[i];
             option2Text.innerHTML = Bouton_droit[i];
-            option1.style.display = 'none';
-            option2.style.display = 'none';
-            attachEndedEvent(videos[0][0])
         }
         else if (i >= 0 && i <= 3) {
-            videos[i][j].remove();
-            videos[i + 1][0].style.display = 'inline-grid';
+            videos_container[i][j].style.display = 'none';;
+            videos_container[i + 1][0].style.display = 'block';
             videos[i + 1][0].requestFullscreen();
-            videos[i + 1][0].play();
             i++;
             j = 0;
             option1Text.innerHTML = Bouton_gauche[i];
             option2Text.innerHTML = Bouton_droit[i];
-            option1.style.display = 'none';
-            option2.style.display = 'none';
-            attachEndedEvent(videos[i][0])
         }
         else if (i == 4) {
-            videos[4][j].remove()
-            diapo.style.display = 'inline-grid';
+            videos_container[4][j].style.display = 'none';
+            diapo_container.style.display = 'block';
             diapo.requestFullscreen();
-            diapo.play()
-            option1.style.display = 'none'
-            option2.style.display = 'none'
         }
 
     })
@@ -86,38 +74,27 @@ window.onload = function () {
     //je clique sur l'option2
     option2.addEventListener('click', function () {
         if (i == -1) {
-            video1.remove();
-            videos[0][1].style.display = 'inline-grid';
+            video1_container.style.display = 'none';
+            videos_container[0][1].style.display = 'block';
             videos[0][1].requestFullscreen();
-            videos[0][1].play();
             i = 0;
             j = 1;
             option1Text.innerHTML = Bouton_gauche[i]
             option2Text.innerHTML = Bouton_droit[i]
-            option1.style.display = 'none'
-            option2.style.display = 'none'
-            attachEndedEvent(videos[0][1]);
         }
         else if (i >= 0 && i <= 3) {
-            videos[i][j].remove();
-            videos[i + 1][1].style.display = 'inline-grid';
+            videos_container[i][j].style.display = 'none';
+            videos_container[i + 1][1].style.display = 'block';
             videos[i + 1][1].requestFullscreen();
-            videos[i + 1][1].play();
             i++;
             j = 1;
             option1Text.innerHTML = Bouton_gauche[i];
             option2Text.innerHTML = Bouton_droit[i];
-            option1.style.display = 'none'
-            option2.style.display = 'none'
-            attachEndedEvent(videos[i][1])
         }
         else if (i == 4) {
-            videos[4][j].remove()
-            diapo.style.display = 'inline-grid';
+            videos_container[4][j].style.display = 'none';
+            diapo_container.style.display = 'block';
             diapo.requestFullscreen();
-            diapo.play()
-            option1.style.display = 'none'
-            option2.style.display = 'none'
         }
     })
 

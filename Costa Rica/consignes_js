@@ -1,0 +1,11 @@
+const button = document.getElementById("start");
+const checkbox1 = document.querySelector("input[type='checkbox']:nth-of-type(1)");
+const checkbox2 = document.querySelector("input[type='checkbox']:nth-of-type(2)");
+
+button.addEventListener("click", function () {
+    if (checkbox1.checked && checkbox2.checked) {
+        window.location.href = "Costa_Rica.html";
+    } else {
+        alert("Veuillez cocher les deux cases avant de continuer.");
+    }
+});

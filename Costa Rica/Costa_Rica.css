@@ -18,54 +18,51 @@ body {
     /* background-color: red; */
 }
 
-#video1 {
-    display: none;
-    position: absolute;
-    top: 0%;
-    background-color: green;
-}
-
-#video2_1 {
+.video1_container {
     display: none;
 }
 
-#video2_2 {
+.video2_1_container {
     display: none;
 }
 
-#video3_1 {
+.video2_2_container {
     display: none;
 }
 
-#video3_2 {
+.video3_1_container {
     display: none;
 }
 
-#video4_1 {
+.video3_2_container {
     display: none;
 }
 
-#video4_2 {
+.video4_1_container {
     display: none;
 }
 
-#video5_1 {
+.video4_2_container {
     display: none;
 }
 
-#video5_2 {
+.video5_1_container {
     display: none;
 }
 
-#video6_1 {
+.video5_2_container {
     display: none;
 }
 
-#video6_2 {
+.video6_1_container {
     display: none;
 }
 
-#diapo {
+.video6_2_container {
+    display: none;
+}
+
+.diapo_container {
     display: none;
 }
 
